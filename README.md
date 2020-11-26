@@ -13,8 +13,8 @@ Template
 https://startbootstrap.com/theme/sb-admin-2
 
 update composer.json
-	"minimum-stability": "beta",
-	"prefer-stable": true,
+"minimum-stability": "beta",
+"prefer-stable": true,
 
 Install myth-auth
 composer require myth/auth
