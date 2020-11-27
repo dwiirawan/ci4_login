@@ -8,6 +8,23 @@
         <div class="sidebar-brand-text mx-3">WPU </div>
     </a>
 
+    <?php if (in_groups('admin')) : ?>
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            User Management
+        </div>
+
+        <!-- Nav Item - User List -->
+        <li class="nav-item">
+            <a class="nav-link" href="<?= base_url('admin'); ?>">
+                <i class="fas fa-fw fa-users"></i>
+                <span>User List</span></a>
+        </li>
+    <?php endif; ?>
+
     <!-- Divider -->
     <hr class="sidebar-divider">
 
@@ -18,7 +35,7 @@
 
     <!-- Nav Item - My Profile -->
     <li class="nav-item">
-        <a class="nav-link" href="My Profile.html">
+        <a class="nav-link" href="<?= base_url('user'); ?>">
             <i class="fas fa-fw fa-user"></i>
             <span>My Profile</span></a>
     </li>
@@ -35,7 +52,7 @@
 
     <!-- Nav Item - Logout -->
     <li class="nav-item">
-        <a class="nav-link" href="Logout.html">
+        <a class="nav-link" href="<?= base_url('logout'); ?>">
             <i class="fas fa-fw fa-sign-out-alt"></i>
             <span>Logout</span></a>
     </li>

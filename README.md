@@ -47,11 +47,9 @@ contoh: admin, user
 permissions = hak akses untuk user
 contoh: manage-users, manage-profile
 
-Beri default group
-
 # Registration & Login
 
-Buka app/Config/Filters.php
+Edit app/Config/Filters.php
 'login' => \Myth\Auth\Filters\LoginFilter::class,
 'role' => \Myth\Auth\Filters\RoleFilter::class,
 'permission' => \Myth\Auth\Filters\PermissionFilter::class,
@@ -69,12 +67,12 @@ public $globals = [
 ],
 ];
 
-buka vendor\myth\auth\src\Filters\LoginFilter.php
+Edit vendor\myth\auth\src\Filters\LoginFilter.php
 public function before(RequestInterface $request, $arguments = NULL)
 public function after(RequestInterface $request, ResponseInterface $response, $arguments = NULL)
 
 Arahkan login ke view
-buka vendor\myth\auth\src\Config\Auth.php
+Edit vendor\myth\auth\src\Config\Auth.php
 public $views = [
 'login' => '\App\Views\Auth\login',
 'register' => '\App\Views\Auth\register',
@@ -85,3 +83,41 @@ public $views = [
 ];
 
 Samakan register pada view auth dengan view register yang kita buat
+Aktifasi email dinonaktifkan
+public $requireActivation = false;
+
+Buat controller User, arahkan route ke User
+
+# Group & Permission
+
+Beri default group
+Edit vendor\myth\auth\src\Config\Auth.php
+public $defaultUserGroup = 'user';
+user: user@mail.com
+pass: rahasia20
+
+# Retrict Access
+
+Tambahkan helper di app\Controllers\BaseController.php
+protected $helpers = ['auth'];
+
+Pada sidebar
+?php if (in_groups('admin')) : ?> // diakses hanya untuk admin
+
+Arahkan jika tidak sesuai role
+Edit vendor\myth\auth\src\Filters\RoleFilter.php
+return redirect()->to('/user');
+
+# User List & Profile
+
+Edit Routes.php
+$routes->get('/admin', 'Admin::index', ['filter' => 'role:admin']);
+$routes->get('/admin/index', 'Admin::index', ['filter' => 'role:admin']);
+
+Buat join table
+$db = \Config\Database::connect();
+$builder = $db->table('users');
+$builder->select('users.id as userid, username, email, name');
+$builder->join('auth_groups_users', 'auth_groups_users.user_id = users.id');
+$builder->join('auth_groups', 'auth_groups.id = auth_groups_users.group_id');
+$query = $builder->get();
